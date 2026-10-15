@@ -31,4 +31,6 @@ export const loginRequest = {
   scopes: ['openid', 'profile', 'email'],
 };
 
+export const APP2_URL = process.env.REACT_APP_APP2_URL || 'http://localhost:3001';
+
 export const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';

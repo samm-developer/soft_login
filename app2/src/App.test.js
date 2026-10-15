@@ -1,8 +1,23 @@
 import { render, screen } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
+afterEach(() => window.history.replaceState(null, '', '/'));
+
+test('asks for tokens when none are passed', () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+  expect(screen.getByText(/no tokens received/i)).toBeInTheDocument();
+});
+
+test('shows tokens passed in the URL fragment and clears them from the URL', () => {
+  window.history.replaceState(
+    null,
+    '',
+    `/#${new URLSearchParams({ id_token: 'id-abc', access_token: 'access-xyz' })}`,
+  );
+
+  render(<App />);
+
+  expect(screen.getByLabelText('ID token')).toHaveValue('id-abc');
+  expect(screen.getByLabelText('Access token')).toHaveValue('access-xyz');
+  expect(window.location.hash).toBe('');
 });

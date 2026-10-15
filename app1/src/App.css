@@ -55,3 +55,37 @@
 .error {
   color: #b91c1c;
 }
+
+.tokens {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin: 24px 0;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.token {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  text-align: left;
+  font-weight: 600;
+}
+
+.token textarea {
+  font: 12px/1.4 ui-monospace, Menlo, monospace;
+  resize: vertical;
+  word-break: break-all;
+}
+
+.btn-primary {
+  border-color: #2563eb;
+  background: #2563eb;
+  color: #fff;
+}

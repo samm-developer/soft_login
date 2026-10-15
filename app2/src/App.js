@@ -1,24 +1,53 @@
-import logo from './logo.svg';
+import { useEffect, useState } from 'react';
 import './App.css';
 
+function readTokensFromHash() {
+  const params = new URLSearchParams(window.location.hash.slice(1));
+  return {
+    idToken: params.get('id_token'),
+    accessToken: params.get('access_token'),
+  };
+}
+
 function App() {
+  const [{ idToken, accessToken }] = useState(readTokensFromHash);
+
+  // Drop the tokens from the address bar and history once they're read.
+  useEffect(() => {
+    if (window.location.hash) {
+      window.history.replaceState(
+        null,
+        '',
+        window.location.pathname + window.location.search,
+      );
+    }
+  }, []);
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <main className="card">
+        <h1>App 2</h1>
+        {idToken || accessToken ? (
+          <>
+            {idToken && <TokenPanel label="ID token" token={idToken} />}
+            {accessToken && (
+              <TokenPanel label="Access token" token={accessToken} />
+            )}
+          </>
+        ) : (
+          <p>No tokens received. Generate them in App 1 and click “Open in App 2”.</p>
+        )}
+      </main>
     </div>
+  );
+}
+
+function TokenPanel({ label, token }) {
+  return (
+    <section className="panel">
+      <h2>{label}</h2>
+      <textarea readOnly rows={3} value={token} aria-label={label} />
+    </section>
   );
 }
 
