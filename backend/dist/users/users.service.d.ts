@@ -10,5 +10,10 @@ export declare class UsersService {
     findOne(id: string): Promise<User>;
     update(id: string, dto: UpdateUserDto): Promise<User>;
     remove(id: string): Promise<void>;
+    findOrCreateMicrosoftUser(profile: {
+        microsoftId: string;
+        email: string;
+        name: string;
+    }): Promise<User>;
     private ensureEmailAvailable;
 }

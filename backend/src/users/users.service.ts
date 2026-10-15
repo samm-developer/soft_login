@@ -59,6 +59,26 @@ export class UsersService {
     }
   }
 
+  async findOrCreateMicrosoftUser(profile: {
+    microsoftId: string;
+    email: string;
+    name: string;
+  }): Promise<User> {
+    const existing = await this.usersRepository.findOneBy({
+      microsoftId: profile.microsoftId,
+    });
+    if (existing) {
+      return existing;
+    }
+    // Don't auto-link to an existing password account by email: the email
+    // claim isn't a reliable proof of ownership across all Microsoft tenants.
+    await this.ensureEmailAvailable(profile.email);
+    const saved = await this.usersRepository.save(
+      this.usersRepository.create({ ...profile, password: null }),
+    );
+    return this.findOne(saved.id);
+  }
+
   private async ensureEmailAvailable(email: string): Promise<void> {
     if (await this.usersRepository.existsBy({ email })) {
       throw new ConflictException('Email already in use');

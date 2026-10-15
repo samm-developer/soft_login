@@ -57,6 +57,17 @@ let UsersService = class UsersService {
             throw new NotFoundException(`User ${id} not found`);
         }
     }
+    async findOrCreateMicrosoftUser(profile) {
+        const existing = await this.usersRepository.findOneBy({
+            microsoftId: profile.microsoftId,
+        });
+        if (existing) {
+            return existing;
+        }
+        await this.ensureEmailAvailable(profile.email);
+        const saved = await this.usersRepository.save(this.usersRepository.create({ ...profile, password: null }));
+        return this.findOne(saved.id);
+    }
     async ensureEmailAvailable(email) {
         if (await this.usersRepository.existsBy({ email })) {
             throw new ConflictException('Email already in use');

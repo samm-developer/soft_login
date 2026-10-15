@@ -17,8 +17,13 @@ export class User {
   @Column({ unique: true })
   email: string;
 
-  @Column({ select: false })
-  password: string;
+  // Null for accounts that only sign in with Microsoft.
+  @Column({ type: 'varchar', nullable: true, select: false })
+  password: string | null;
+
+  // Microsoft Entra object id (`oid` claim) for accounts linked to Microsoft.
+  @Column({ type: 'varchar', nullable: true, unique: true })
+  microsoftId: string | null;
 
   @Column({ default: true })
   isActive: boolean;

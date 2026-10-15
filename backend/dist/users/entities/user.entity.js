@@ -13,6 +13,7 @@ let User = class User {
     name;
     email;
     password;
+    microsoftId;
     isActive;
     createdAt;
     updatedAt;
@@ -30,9 +31,13 @@ __decorate([
     __metadata("design:type", String)
 ], User.prototype, "email", void 0);
 __decorate([
-    Column({ select: false }),
-    __metadata("design:type", String)
+    Column({ type: 'varchar', nullable: true, select: false }),
+    __metadata("design:type", Object)
 ], User.prototype, "password", void 0);
+__decorate([
+    Column({ type: 'varchar', nullable: true, unique: true }),
+    __metadata("design:type", Object)
+], User.prototype, "microsoftId", void 0);
 __decorate([
     Column({ default: true }),
     __metadata("design:type", Boolean)
